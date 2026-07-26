@@ -11,7 +11,7 @@
 </div>
 @endif
 
-{{-- Error alert — TAMBAHKAN INI --}}
+{{-- Error alert --}}
 @if($errors->any())
 <div class="bg-red-50 border border-red-200 text-red-600 text-sm rounded-xl px-5 py-3 mb-4">
     <ul class="list-disc list-inside">
@@ -238,7 +238,6 @@
     </div>
 </div>
 
-<script>
 <script>
 function gantiTab(tab) {
     const tabs = ['profil', 'struk'];
