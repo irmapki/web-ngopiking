@@ -1,0 +1,57 @@
+databases:
+  - name: ngopiking-db
+    plan: free
+    databaseName: ngopiking
+    user: ngopiking
+
+services:
+  - type: web
+    name: web-ngopiking
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: APP_NAME
+        value: NgopiKing
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: "false"
+      - key: APP_URL
+        sync: false
+      - key: APP_KEY
+        generateValue: true
+      - key: LOG_CHANNEL
+        value: stack
+      - key: LOG_LEVEL
+        value: error
+      - key: DB_CONNECTION
+        value: pgsql
+      - key: DB_HOST
+        fromDatabase:
+          name: ngopiking-db
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: ngopiking-db
+          property: port
+      - key: DB_DATABASE
+        fromDatabase:
+          name: ngopiking-db
+          property: database
+      - key: DB_USERNAME
+        fromDatabase:
+          name: ngopiking-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: ngopiking-db
+          property: password
+      - key: SESSION_DRIVER
+        value: database
+      - key: CACHE_STORE
+        value: database
+      - key: QUEUE_CONNECTION
+        value: database
+      - key: FILESYSTEM_DISK
+        value: public
