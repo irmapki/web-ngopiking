@@ -3,9 +3,11 @@ set -e
 
 cd /var/www/html
 
-# Generate APP_KEY kalau belum ada (aman dipanggil berkali-kali)
+# APP_KEY harus sudah diisi lewat Environment Variable di platform (Railway/Render),
+# karena file .env sengaja tidak ikut masuk ke dalam container.
 if [ -z "$APP_KEY" ]; then
-  php artisan key:generate --force
+  echo "ERROR: APP_KEY belum diisi. Tambahkan environment variable APP_KEY di platform deploy kamu."
+  exit 1
 fi
 
 # Cache config, route, view untuk performa production
