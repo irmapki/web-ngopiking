@@ -5,6 +5,11 @@ set -e
 a2dismod mpm_event mpm_worker 2>/dev/null || true
 a2enmod mpm_prefork 2>/dev/null || true
 
+# Railway kasih env PORT secara dinamis, arahkan Apache untuk listen di port itu
+: "${PORT:=80}"
+sed -ri "s/^Listen .*/Listen ${PORT}/" /etc/apache2/ports.conf
+sed -ri "s/:80>/:${PORT}>/" /etc/apache2/sites-enabled/*.conf
+
 cd /var/www/html
 
 # APP_KEY harus sudah diisi lewat Environment Variable di platform (Railway/Render),
