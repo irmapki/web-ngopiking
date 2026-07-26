@@ -1,29 +1,24 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -e
 
-echo "=== Memastikan hanya 1 MPM aktif (prefork) ==="
-a2dismod mpm_event mpm_worker 2>/dev/null || true
-a2enmod mpm_prefork 2>/dev/null || true
+cd /var/www/html
 
-echo "=== Setup Laravel ==="
-
-echo "-> Cek storage link..."
-if [ ! -L /var/www/html/public/storage ]; then
-    php artisan storage:link
-else
-    echo "Storage link sudah ada, dilewati."
+# APP_KEY harus sudah diisi lewat Environment Variable di platform (Railway/Render),
+# karena file .env sengaja tidak ikut masuk ke dalam container.
+if [ -z "$APP_KEY" ]; then
+  echo "ERROR: APP_KEY belum diisi. Tambahkan environment variable APP_KEY di platform deploy kamu."
+  exit 1
 fi
 
-echo "-> Menjalankan migration..."
-php artisan migrate --force
-
-echo "-> Cache config, route, view..."
+# Cache config, route, view untuk performa production
 php artisan config:cache
 php artisan route:cache
 php artisan view:cache
 
-echo "=== Cek konfigurasi Apache sebelum start ==="
-apache2ctl configtest
+# Jalankan migration otomatis tiap deploy
+php artisan migrate --force
 
-echo "=== Starting Apache ==="
+# Buat symlink storage (untuk file upload publik)
+php artisan storage:link || true
+
 exec "$@"
