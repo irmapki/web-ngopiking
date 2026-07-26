@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 set -e
 
+# Pastikan hanya 1 MPM yang aktif (jaga-jaga kalau ada yang re-enable mpm_event saat runtime)
+a2dismod mpm_event mpm_worker 2>/dev/null || true
+a2enmod mpm_prefork 2>/dev/null || true
+
 cd /var/www/html
 
 # APP_KEY harus sudah diisi lewat Environment Variable di platform (Railway/Render),
