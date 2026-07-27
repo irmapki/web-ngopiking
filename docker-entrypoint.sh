@@ -26,9 +26,12 @@ php artisan view:cache
 
 # Jalankan migration otomatis tiap deploy
 php artisan migrate --force
-php artisan db:seed --force
+
+# Buat akun admin default kalau belum ada (aman dijalankan berkali-kali)
+php artisan db:seed --class=AdminSeeder --force
 
 # Buat symlink storage (untuk file upload publik)
 php artisan storage:link || true
 
 exec "$@"
+
