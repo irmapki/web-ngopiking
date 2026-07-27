@@ -10,12 +10,14 @@ class AdminSeeder extends Seeder
 {
     public function run(): void
     {
-        User::create([
-            'name'     => 'Administrator',
-            'username' => 'admin',
-            'email'    => 'admin@ngopking.com',
-            'password' => Hash::make('admin123'),
-            'role'     => 'admin',
-        ]);
+        User::firstOrCreate(
+            ['email' => 'admin@ngopking.com'],
+            [
+                'name'     => 'Administrator',
+                'username' => 'admin',
+                'password' => Hash::make('admin123'),
+                'role'     => 'admin',
+            ]
+        );
     }
 }
