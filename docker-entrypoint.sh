@@ -26,6 +26,7 @@ php artisan view:cache
 
 # Jalankan migration otomatis tiap deploy
 php artisan migrate --force
+php artisan db:seed --force
 
 # Buat symlink storage (untuk file upload publik)
 php artisan storage:link || true
